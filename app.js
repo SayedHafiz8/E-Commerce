@@ -12,6 +12,7 @@ const categoryRouter = require("./router/categoryRouter");
 const subCategriesRoutes = require("./router/subCategoiesRoutes");
 const brandRoutes = require("./router/brandRoutes");
 const productRoutes = require("./router/productRoutes");
+const userRoutes = require("./router/userRoutes")
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "uploads")));
@@ -20,6 +21,8 @@ app.use("/api/categories", categoryRouter);
 app.use("/api/subCategories", subCategriesRoutes);
 app.use("/api/brands", brandRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/users", userRoutes);
+
 // Genrate and Handeling the Error
 app.all("*", (req, res, next) => {
   next(new ApiErrors(`Can't find this route: ${req.originalUrl}`, 400));
