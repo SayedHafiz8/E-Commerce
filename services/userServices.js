@@ -1,6 +1,6 @@
 const { v4: uuidv4 } = require("uuid");
 const sharp = require("sharp");
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
 const asyncHandler = require("express-async-handler");
 const model = require("../model/userModel");
 const ApiErrors = require("../utils/apiErros");
@@ -8,7 +8,7 @@ const factory = require("./handellingServices");
 const { uploadSingleImage } = require("../middlewares/uploadImage");
 
 const getusers = factory.getAll(model);
-const creatuser = factory.createOne(model)
+const creatuser = factory.createOne(model);
 const specificuser = factory.specificOne(model);
 const updateuser = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
@@ -39,7 +39,8 @@ const changePassword = asyncHandler(async (req, res, next) => {
   const ducoment = await model.findOneAndUpdate(
     { _id: id },
     {
-      password: await bcrypt.hash(req.body.password, 8)
+      password: await bcrypt.hash(req.body.password, 8),  
+      passChangedAt: Date.now(),
     },
     {
       new: true,

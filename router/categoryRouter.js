@@ -1,5 +1,7 @@
 //export validation arraies
 const router = require("express").Router();
+
+const AuthServices = require("../services/authServices")
 const {
   specificCategoryVal,
   updateCategoryVal,
@@ -22,6 +24,7 @@ router.use("/:categoryId", subcategoryRoutes);
 
 router.post(
   "/creatCategory",
+  AuthServices.protect,
   uplodeImage,
   resizeImage,
   createCategoryVal,
