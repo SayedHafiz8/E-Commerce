@@ -1,4 +1,6 @@
 const router = require("express").Router();
+
+const AuthServices = require("../services/authServices");
 const {
   createProductVal,
   deleteProductVal,
@@ -18,11 +20,28 @@ const {
 router
   .route("/")
   .get(getAllProducts)
-  .post(uploadImage, resizeImage, createProductVal, createProduct);
+  .post(
+    AuthServices.protect,
+    AuthServices.allowed("admin", "user"),
+    uploadImage,
+    resizeImage,
+    createProductVal,
+    createProduct
+  );
 
 router
   .route("/:id")
   .get(spcificProductVal, specificProduct)
-  .put(updateProductVal, updateProduct)
-  .delete(deleteProductVal, deleteProduct);
+  .put(
+    AuthServices.protect,
+    AuthServices.allowed("admin", "user"),
+    updateProductVal,
+    updateProduct
+  )
+  .delete(
+    AuthServices.protect,
+    AuthServices.allowed("admin"),
+    deleteProductVal,
+    deleteProduct
+  );
 module.exports = router;

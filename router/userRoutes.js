@@ -15,20 +15,38 @@ const {
   deleteUesrVal,
   specificUesrVal,
   updateUesrVal,
-  changePasswordVal
+  changePasswordVal,
 } = require("../utils/validators/userValidation");
+const AuthServices = require("../services/authServices");
 
-router.put("/changePassword/:id", changePasswordVal, changePassword)
+router.put("/changePassword/:id", changePasswordVal, changePassword);
 
 router
   .route("/")
-  .get(getusers)
+  .get(AuthServices.protect, AuthServices.allowed("admin"), getusers)
   .post(uplodeImage, resizeImage, createUesrVal, creatuser);
 
 router
   .route("/:id")
-  .get(specificUesrVal, specificuser)
-  .put(uplodeImage, resizeImage, updateUesrVal, updateuser)
-  .delete(deleteUesrVal, deleteuser);
+  .get(
+    AuthServices.protect,
+    AuthServices.allowed("admin"),
+    specificUesrVal,
+    specificuser
+  )
+  .put(
+    AuthServices.protect,
+    AuthServices.allowed("admin"),
+    uplodeImage,
+    resizeImage,
+    updateUesrVal,
+    updateuser
+  )
+  .delete(
+    AuthServices.protect,
+    AuthServices.allowed("admin"),
+    deleteUesrVal,
+    deleteuser
+  );
 
 module.exports = router;

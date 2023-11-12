@@ -54,7 +54,6 @@ const protect = asyncHandler(async (req, res, next) => {
 
   // 2) verify token
   const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-  console.log(decoded);
 
   // 3) Check if user exists
   const user = await model.findById(decoded.userId);
@@ -67,7 +66,8 @@ const protect = asyncHandler(async (req, res, next) => {
     // change the date of change password from date to time
     const passChangeTime = parseInt(user.passChangedAt.getTime() / 1000, 10);
 
-    if (passChangeTime > decoded.iat) {   //  (decoded.iat) ==> the time of token generated
+    if (passChangeTime > decoded.iat) {
+      //  (decoded.iat) ==> the time of token generated
       return next(
         new ApiErrors(
           "This user recently changed his password, please login again...",
@@ -77,7 +77,17 @@ const protect = asyncHandler(async (req, res, next) => {
     }
   }
 
+  req.user = user;
+
   next();
 });
 
-module.exports = { signUp, login, protect };
+const allowed = (...roles) =>
+  asyncHandler(async (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(new ApiErrors("You are not allowed for this route", 403));
+    }
+    next();
+  });
+
+module.exports = { signUp, login, protect, allowed };

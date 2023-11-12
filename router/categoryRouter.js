@@ -1,7 +1,7 @@
 //export validation arraies
 const router = require("express").Router();
 
-const AuthServices = require("../services/authServices")
+const AuthServices = require("../services/authServices");
 const {
   specificCategoryVal,
   updateCategoryVal,
@@ -25,6 +25,7 @@ router.use("/:categoryId", subcategoryRoutes);
 router.post(
   "/creatCategory",
   AuthServices.protect,
+  AuthServices.allowed("admin", "manager"),
   uplodeImage,
   resizeImage,
   createCategoryVal,
@@ -34,11 +35,19 @@ router.get("/allCategories", getCategory);
 router.get("/getOneCategory/:id", specificCategoryVal, specificCategory);
 router.put(
   "/updateOneCtegory/:id",
+  AuthServices.protect,
+  AuthServices.allowed("admin", "manager"),
   uplodeImage,
   resizeImage,
   updateCategoryVal,
   updateCategory
 );
-router.delete("/deleteCategory/:id", deleteCategoryVal, deleteCategory);
+router.delete(
+  "/deleteCategory/:id",
+  AuthServices.protect,
+  AuthServices.allowed("admin", "manager"),
+  deleteCategoryVal,
+  deleteCategory
+);
 
 module.exports = router;

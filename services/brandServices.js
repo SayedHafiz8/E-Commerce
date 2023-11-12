@@ -16,13 +16,15 @@ const uplodeImage = uploadSingleImage("image");
 
 const resizeImage = asyncHandler(async (req, res, next) => {
   const filename = `Brand-${uuidv4()}-${Date.now()}.jpeg`;
-  await sharp(req.file.buffer)
-    .resize(600, 600)
-    .toFormat("jpeg")
-    .jpeg({ quality: 80 })
-    .toFile(`uploads/brands/${filename}`);
+  if (req.file) {
+    await sharp(req.file.buffer)
+      .resize(600, 600)
+      .toFormat("jpeg")
+      .jpeg({ quality: 80 })
+      .toFile(`uploads/categories/${filename}`);
 
-  req.body.image = filename;
+    req.body.image = filename;
+  }
   next();
 });
 

@@ -1,4 +1,6 @@
 const router = require("express").Router();
+
+const AuthServices = require("../services/authServices");
 const {
   creatBrand,
   deleteBrand,
@@ -19,12 +21,31 @@ const {
 router
   .route("/")
   .get(getBrands)
-  .post(uplodeImage, resizeImage, createBrandVal, creatBrand);
+  .post(
+    AuthServices.protect,
+    AuthServices.allowed("admin"),
+    uplodeImage,
+    resizeImage,
+    createBrandVal,
+    creatBrand
+  );
 
 router
   .route("/:id")
   .get(specificBrandVal, specificBrand)
-  .put(uplodeImage, resizeImage, updateBrandVal, updateBrand)
-  .delete(deleteBrandyVal, deleteBrand);
+  .put(
+    AuthServices.protect,
+    AuthServices.allowed("admin"),
+    uplodeImage,
+    resizeImage,
+    updateBrandVal,
+    updateBrand
+  )
+  .delete(
+    AuthServices.protect,
+    AuthServices.allowed("admin"),
+    deleteBrandyVal,
+    deleteBrand
+  );
 
 module.exports = router;
