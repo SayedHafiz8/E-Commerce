@@ -54,7 +54,6 @@ const loginVal = [
   check("password")
     .notEmpty()
     .withMessage("password is required")
-    .isStrongPassword()
     .withMessage("Must be a strong password"),
 
   validationMiddleware,

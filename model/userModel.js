@@ -26,6 +26,9 @@ const userSchema = new mongoose.Schema(
       required: [true, "password must be required"],
     },
     passChangedAt: Date,
+    passResetCode: String,
+    passResetExp: Date,
+    passResetVerify: Boolean,
     phone: {
       type: Number,
     },
