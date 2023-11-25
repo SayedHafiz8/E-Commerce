@@ -173,7 +173,6 @@ const resetPassword = asyncHandler(async (req, res, next) => {
   const token = createToken(user._id)
   res.status(200).json({user, token})
 });
-
 module.exports = {
   signUp,
   login,
