@@ -22,7 +22,7 @@ const createUesrVal = [
     .withMessage("Too short message name"),
   check("email")
     .notEmpty()
-    .withMessage("enail is required")
+    .withMessage("email is required")
     .isEmail()
     .withMessage("Invalid email")
     .custom((val) =>
@@ -61,6 +61,19 @@ const updateUesrVal = [
     .withMessage("Too long message name")
     .isLength({ min: 3 })
     .withMessage("Too short message name"),
+  check("email")
+    .notEmpty()
+    .withMessage("email is required")
+    .isEmail()
+    .withMessage("Invalid email")
+    .custom((val) =>
+      model.findOne({ email: val }).then((user) => {
+        if (user) {
+          return Promise.reject(new Error("This email in use"));
+        }
+      })
+    ),
+  check("phone").optional().isMobilePhone("ar-EG"),
   validationMiddleware,
 ];
 const deleteUesrVal = [
@@ -100,10 +113,37 @@ const changePasswordVal = [
     }),
   validationMiddleware,
 ];
+const updateLoggedUesrVal = [
+  check("name")
+    .optional()
+    .custom((val, { req }) => {
+      req.body.slug = slugify(val);
+      return true;
+    })
+    .isLength({ max: 32 })
+    .withMessage("Too long message name")
+    .isLength({ min: 3 })
+    .withMessage("Too short message name"),
+  check("email")
+    .notEmpty()
+    .withMessage("email is required")
+    .isEmail()
+    .withMessage("Invalid email")
+    .custom((val) =>
+      model.findOne({ email: val }).then((user) => {
+        if (user) {
+          return Promise.reject(new Error("This email in use"));
+        }
+      })
+    ),
+  check("phone").optional().isMobilePhone("ar-EG"),
+  validationMiddleware,
+];
 module.exports = {
   specificUesrVal,
   updateUesrVal,
   createUesrVal,
   deleteUesrVal,
   changePasswordVal,
+  updateLoggedUesrVal,
 };

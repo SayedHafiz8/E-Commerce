@@ -13,7 +13,7 @@ router.post("/signup", signupVal, signUp);
 router.post("/login", loginVal, login);
 router.post("/forgotPass", forgotPassword);
 router.post("/verifyPass", verifyResetPass);
-router.post("/resetPass", resetPassword);
+router.put("/resetPass", resetPassword);
 
 // router
 //   .route("/:id")

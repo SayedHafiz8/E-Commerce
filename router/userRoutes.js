@@ -8,6 +8,9 @@ const {
   uplodeImage,
   resizeImage,
   changePassword,
+  getLoggedUser,
+  changeLoggedPassword,
+  updateLoggedUser
 } = require("../services/userServices");
 
 const {
@@ -16,10 +19,14 @@ const {
   specificUesrVal,
   updateUesrVal,
   changePasswordVal,
+  updateLoggedUesrVal
 } = require("../utils/validators/userValidation");
 const AuthServices = require("../services/authServices");
 
 router.put("/changePassword/:id", changePasswordVal, changePassword);
+router.get("/getMe", AuthServices.protect, getLoggedUser, specificuser);
+router.put("/changeMyPass", AuthServices.protect, changeLoggedPassword);
+router.put("/updateMyData", AuthServices.protect, updateLoggedUesrVal, updateLoggedUser);
 
 router
   .route("/")

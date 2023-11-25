@@ -6,12 +6,7 @@ const asyncHandler = require("express-async-handler");
 const model = require("../model/userModel");
 const ApiErrors = require("../utils/apiErros");
 const sendEmail = require("../utils/sendEmail");
-
-const createToken = (paylode) => {
-  jwt.sign({ userId: paylode }, process.env.JWT_SECRET_KEY, {
-    expiresIn: process.env.EXPIRE_TIME,
-  });
-}
+const createToken = require("../utils/createToken")
 
 const signUp = asyncHandler(async (req, res, next) => {
   // 1- create user
@@ -22,7 +17,8 @@ const signUp = asyncHandler(async (req, res, next) => {
   });
 
   // 2- Generate token
-  const token = createToken(user._id)
+  const token = createToken(user._id);
+  
 
   res.status(201).json({ data: user, token });
 });
@@ -33,7 +29,7 @@ const login = asyncHandler(async (req, res, next) => {
   if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
     return next(new ApiErrors("Incorrect email or password"));
   }
-  const token = createToken(user._id)
+  const token = createToken(user._id);
 
   res.status(200).json({ data: user, token });
 });
@@ -170,8 +166,8 @@ const resetPassword = asyncHandler(async (req, res, next) => {
 
   await user.save();
 
-  const token = createToken(user._id)
-  res.status(200).json({user, token})
+  const token = createToken(user._id);
+  res.status(200).json({ user, token });
 });
 module.exports = {
   signUp,
@@ -180,5 +176,5 @@ module.exports = {
   allowed,
   forgotPassword,
   verifyResetPass,
-  resetPassword
+  resetPassword,
 };

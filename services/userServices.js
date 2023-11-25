@@ -6,6 +6,7 @@ const model = require("../model/userModel");
 const ApiErrors = require("../utils/apiErros");
 const factory = require("./handellingServices");
 const { uploadSingleImage } = require("../middlewares/uploadImage");
+const createToken = require("../utils/createToken");
 
 const getusers = factory.getAll(model);
 const creatuser = factory.createOne(model);
@@ -39,7 +40,7 @@ const changePassword = asyncHandler(async (req, res, next) => {
   const ducoment = await model.findOneAndUpdate(
     { _id: id },
     {
-      password: await bcrypt.hash(req.body.password, 8),  
+      password: await bcrypt.hash(req.body.password, 8),
       passChangedAt: Date.now(),
     },
     {
@@ -72,6 +73,41 @@ const resizeImage = asyncHandler(async (req, res, next) => {
   next();
 });
 
+const getLoggedUser = asyncHandler(async (req, res, next) => {
+  req.params.id = req.user._id;
+  next();
+});
+const changeLoggedPassword = asyncHandler(async (req, res, next) => {
+  const user = await model.findOneAndUpdate(
+    req.user._id,
+    {
+      password: await bcrypt.hash(req.body.password, 8),
+      passChangedAt: Date.now(),
+    },
+    {
+      new: true,
+    }
+  );
+  const token = createToken(user._id);
+  res.status(200).json({ data: user, token });
+});
+const updateLoggedUser = asyncHandler(async (req, res, next) => {
+  const updateUser = await model.findByIdAndUpdate(
+    req.user._id,
+    {
+      name: req.body.name,
+      email: req.body.email,
+      phone: req.body.phone,
+    },
+    {
+      new: true,
+    }
+  );
+  console.log(updateUser)
+
+  res.status(200).json({data: updateUser})
+});
+
 module.exports = {
   getusers,
   creatuser,
@@ -81,4 +117,7 @@ module.exports = {
   changePassword,
   uplodeImage,
   resizeImage,
+  getLoggedUser,
+  changeLoggedPassword,
+  updateLoggedUser
 };
