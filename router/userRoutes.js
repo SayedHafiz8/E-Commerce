@@ -10,7 +10,7 @@ const {
   changePassword,
   getLoggedUser,
   changeLoggedPassword,
-  updateLoggedUser
+  updateLoggedUser,
 } = require("../services/userServices");
 
 const {
@@ -19,19 +19,31 @@ const {
   specificUesrVal,
   updateUesrVal,
   changePasswordVal,
-  updateLoggedUesrVal
+  updateLoggedUesrVal,
 } = require("../utils/validators/userValidation");
 const AuthServices = require("../services/authServices");
 
 router.put("/changePassword/:id", changePasswordVal, changePassword);
 router.get("/getMe", AuthServices.protect, getLoggedUser, specificuser);
 router.put("/changeMyPass", AuthServices.protect, changeLoggedPassword);
-router.put("/updateMyData", AuthServices.protect, updateLoggedUesrVal, updateLoggedUser);
+router.put(
+  "/updateMyData",
+  AuthServices.protect,
+  updateLoggedUesrVal,
+  updateLoggedUser
+);
 
 router
   .route("/")
   .get(AuthServices.protect, AuthServices.allowed("admin"), getusers)
-  .post(uplodeImage, resizeImage, createUesrVal, creatuser);
+  .post(
+    AuthServices.protect,
+    AuthServices.allowed("admin"),
+    uplodeImage,
+    resizeImage,
+    createUesrVal,
+    creatuser
+  );
 
 router
   .route("/:id")

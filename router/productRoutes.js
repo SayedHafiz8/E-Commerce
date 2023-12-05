@@ -16,10 +16,13 @@ const {
   uploadImage,
   resizeImage,
 } = require("../services/productSevices");
+const reviewRoute = require('./reviewRoutes')
+
+router.use('/:productId/reviews', reviewRoute)
 
 router
   .route("/")
-  .get(getAllProducts)
+  .get( getAllProducts)
   .post(
     AuthServices.protect,
     AuthServices.allowed("admin", "user"),

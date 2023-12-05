@@ -44,11 +44,11 @@ const createProductVal = [
     check("images")
     .optional()
     .isArray().withMessage("imges must be in array"),
-    check("rataingAvarge")
+    check("ratingAvarge")
     .isNumeric().withMessage("rating must be number")
     .isLength({min: 1}).withMessage("Rate must be between 1.0 and 5.0")
     .isLength({max: 5}).withMessage("Rate must be between 1.0 and 5.0"),
-    check("rataingQuantity")
+    check("ratingQuantity")
     .optional()
     .isNumeric().withMessage("rating must be number"),
     check("category")

@@ -41,7 +41,7 @@ const resizeImage = asyncHandler(async (req, res, next) => {
 
 const createProduct = factory.createOne(model);
 const getAllProducts = factory.getAll(model);
-const specificProduct = factory.specificOne(model);
+const specificProduct = factory.specificOne(model, 'reviews');
 const updateProduct = factory.updateOne(model);
 const deleteProduct = factory.deleteOne(model);
 

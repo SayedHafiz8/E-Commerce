@@ -38,13 +38,13 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     images: [String],
-    rataingAvarge: {
+    ratingAvarge: {
       type: Number,
       required: true,
       min: [1, "Rate must be between 1.0 and 5.0"],
       max: [5, "Rate must be between 1.0 and 5.0"],
     },
-    rataingQantity: {
+    ratingQantity: {
       type: Number,
       default: 0,
     },
@@ -65,7 +65,12 @@ const productSchema = new mongoose.Schema(
       requied: [true, "Brand must be required"],
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    //  to enable virtual populate
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
 );
 
 const setImageUrl = (doc) => {
@@ -82,6 +87,12 @@ const setImageUrl = (doc) => {
     doc.images = imagesList;
   }
 };
+
+productSchema.virtual("reviews", {
+  ref: "Review",
+  foreignField: "product",
+  localField: "_id",
+});
 
 productSchema.post("init", (doc) => {
   setImageUrl(doc);

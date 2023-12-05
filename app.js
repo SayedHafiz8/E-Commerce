@@ -14,6 +14,7 @@ const brandRoutes = require("./router/brandRoutes");
 const productRoutes = require("./router/productRoutes");
 const userRoutes = require("./router/userRoutes");
 const authRoutes = require("./router/authRoutes");
+const reviewRoutes = require("./router/reviewRoutes")
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "uploads")));
@@ -24,6 +25,7 @@ app.use("/api/brands", brandRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes)
+app.use("/api/reviews", reviewRoutes)
 
 // Genrate and Handeling the Error
 app.all("*", (req, res, next) => {

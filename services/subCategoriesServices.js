@@ -9,6 +9,13 @@ const setCategoryIdToBody = (req, res, next) => {
   if (!req.body.category) req.body.category = req.params.categoryId;
   next();
 };
+const createFilterObj = (req, res, next) => {
+  let filterObject = {};
+  if (req.params.categoryId) filterObject = {category: req.params.categoryId};
+  req.filterObj = filterObject;
+  next()
+}
+
 const createSubCateg = factory.createOne(model);
 const getAllSubCateg = factory.getAll(model);
 const updateSubcateg = factory.updateOne(model);
@@ -21,5 +28,6 @@ module.exports = {
   updateSubcateg,
   specificSubCateg,
   deleteSubCateg,
+  createFilterObj,
   setCategoryIdToBody,
 };

@@ -5,14 +5,16 @@ const ApiFeatures = require("../utils/apifeatures");
 const deleteOne = (model) =>
   asyncHandler(async (req, res, next) => {
     const { id } = req.params;
-    const ducoment = await model.findByIdAndDelete({ _id: id });
+    const ducoment = await model.findByIdAndDelete(id);
     if (!ducoment) {
       return next(
         new ApiErrors(`Can't find any ducoment with thid id ${id}`, 404)
       );
-    } else {
-      res.status(204).send();
     }
+    // Using it for avrRatingsAndQuantity method in reviews model
+    ducoment.deleteOne();
+    // /////////////////
+    res.status(204).send();
   });
 
 const updateOne = (model) =>
@@ -25,9 +27,10 @@ const updateOne = (model) =>
       return next(
         new ApiErrors(`Can't find any ducoment with this id ${id}`, 404)
       );
-    } else {
-      res.status(200).json({ ducoment });
     }
+    // Using it for avrRatingsAndQuantity method in reviews model
+    ducoment.save();
+    res.status(200).json({ ducoment });
   });
 
 const createOne = (model) =>
@@ -36,10 +39,17 @@ const createOne = (model) =>
     res.status(201).json({ msg: "Created Successfuly", ducoment });
   });
 
-const specificOne = (model) =>
+const specificOne = (model, populationOpts) =>
   asyncHandler(async (req, res, next) => {
     const { id } = req.params;
-    const ducoment = await model.findById(id);
+    // 1) build query
+    let query = model.findById(id);
+    if (populationOpts) {
+      query = query.populate(populationOpts);
+    }
+    // 2) execute query
+    const ducoment = await query;
+    // /////////////////
     if (!ducoment) {
       return next(
         new ApiErrors(`Can't find any ducoment with this id ${id}`, 404)
@@ -50,10 +60,12 @@ const specificOne = (model) =>
 
 const getAll = (model) =>
   asyncHandler(async (req, res, next) => {
-    let filterObj = {}
-    if (req.params.categoryId) filterObj = {category: req.params.categoryId}
+    let filter = {};
+    if (req.filterObj) {
+      filter = req.filterObj;
+    }
     const documentsCount = await model.countDocuments();
-    let apifeatures = new ApiFeatures(model.find(filterObj), req.query)
+    let apifeatures = new ApiFeatures(model.find(filter), req.query)
       .filter()
       .search()
       .limiting()
@@ -74,5 +86,5 @@ module.exports = {
   updateOne,
   createOne,
   specificOne,
-  getAll
+  getAll,
 };

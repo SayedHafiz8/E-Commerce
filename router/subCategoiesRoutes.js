@@ -12,6 +12,7 @@ const {
   specificSubCateg,
   updateSubcateg,
   setCategoryIdToBody,
+  createFilterObj
 } = require("../services/subCategoriesServices");
 const AuthServices = require("../services/authServices");
 
@@ -25,7 +26,7 @@ router.post(
   createSubCategVal,
   createSubCateg
 );
-router.get("/getAllSubCateg", getAllSubCateg);
+router.get("/getAllSubCateg", createFilterObj,getAllSubCateg);
 router.get("/specificSubCateg/:id", specificSubCategVal, specificSubCateg);
 router.put(
   "/updateSubcateg/:id",
