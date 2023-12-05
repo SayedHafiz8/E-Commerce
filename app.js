@@ -14,7 +14,8 @@ const brandRoutes = require("./router/brandRoutes");
 const productRoutes = require("./router/productRoutes");
 const userRoutes = require("./router/userRoutes");
 const authRoutes = require("./router/authRoutes");
-const reviewRoutes = require("./router/reviewRoutes")
+const reviewRoutes = require("./router/reviewRoutes");
+const wishListRoutes = require("./router/wishListRoutes");
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "uploads")));
@@ -24,8 +25,9 @@ app.use("/api/subCategories", subCategriesRoutes);
 app.use("/api/brands", brandRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/auth", authRoutes)
-app.use("/api/reviews", reviewRoutes)
+app.use("/api/auth", authRoutes);
+app.use("/api/reviews", reviewRoutes);
+app.use("/api/wishList", wishListRoutes);
 
 // Genrate and Handeling the Error
 app.all("*", (req, res, next) => {

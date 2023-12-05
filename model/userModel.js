@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -34,9 +34,15 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["user", "manager","admin"],
+      enum: ["user", "manager", "admin"],
       default: "user",
     },
+    wishList: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Product",
+      },
+    ],
   },
   { timestamps: true }
 );
@@ -44,15 +50,15 @@ const userSchema = new mongoose.Schema(
 const setImageUrl = (doc) => {
   if (doc.profileImg) {
     const imageUrl = `${process.env.BASE_URL}/users/${doc.profileImg}`;
-    console.log("dsdfdd")
+    console.log("dsdfdd");
     doc.profileImg = imageUrl;
   }
 };
-userSchema.pre("save", async function(next) {
-  if (!this.isModified("password")) return next()
-  this.password = await bcrypt.hash(this.password, 8)
-  next()
-})
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+  this.password = await bcrypt.hash(this.password, 8);
+  next();
+});
 
 userSchema.post("init", (doc) => {
   setImageUrl(doc);
