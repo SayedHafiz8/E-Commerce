@@ -8,28 +8,12 @@ const app = express();
 
 const dbConnection = require("./config/database");
 dbConnection();
-const categoryRouter = require("./router/categoryRouter");
-const subCategriesRoutes = require("./router/subCategoiesRoutes");
-const brandRoutes = require("./router/brandRoutes");
-const productRoutes = require("./router/productRoutes");
-const userRoutes = require("./router/userRoutes");
-const authRoutes = require("./router/authRoutes");
-const reviewRoutes = require("./router/reviewRoutes");
-const wishListRoutes = require("./router/wishListRoutes");
-const addressRoutes = require("./router/addressRoutes");
+const mountRoutes = require("./router/index");
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "uploads")));
 
-app.use("/api/categories", categoryRouter);
-app.use("/api/subCategories", subCategriesRoutes);
-app.use("/api/brands", brandRoutes);
-app.use("/api/products", productRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/auth", authRoutes);
-app.use("/api/reviews", reviewRoutes);
-app.use("/api/wishList", wishListRoutes);
-app.use("/api/addresses", addressRoutes)
+mountRoutes(app);
 
 // Genrate and Handeling the Error
 app.all("*", (req, res, next) => {
